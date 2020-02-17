@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.efrei.brainbow.Controller.MainActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/quizScoreLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Intellect score:" />
+
+    <TextView
+        android:id="@+id/activity_main_greeting_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="Welcome! What's your name?"/>
+
+    <Button
+        android:id="@+id/activity_main_play_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:padding="30dp"
+        android:text="Train intellect" />
+
+</LinearLayout>
