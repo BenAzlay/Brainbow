@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private Button quizButton;
     private Button settingsButton;
     private User currentUser;
+    private int id;
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
     DatabaseHandler db;
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         //Get current user
         db = new DatabaseHandler(this);
         Bundle b = getIntent().getExtras();
-        int id = 1;
+        id = 1;
         if(b != null)
             id = b.getInt("userID");
         try {
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             Boolean reset = data.getBooleanExtra(SettingsActivity.BUNDLE_EXTRA_RESET, false);
             int quizGoal = data.getIntExtra(SettingsActivity.BUNDLE_EXTRA_QUIZ_GOAL, 12);
             int runGoal = data.getIntExtra(SettingsActivity.BUNDLE_EXTRA_RUN_GOAL, 3);
+            int category = data.getIntExtra(SettingsActivity.BUNDLE_EXTRA_CATEGORY, 9);
             String sdeadline = data.getStringExtra(SettingsActivity.BUNDLE_EXTRA_DEADLINE);
             Log.e("Deadline:", sdeadline);
             try {
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
             currentUser.setQuizGoal(quizGoal);
             currentUser.setRunGoal(runGoal);
+            currentUser.setQuizCategory(category);
 
 
             db.updateUser(currentUser);

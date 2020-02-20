@@ -87,7 +87,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         questionIndex = 0;
 
         //API CONNECTION
-        String url = "https://opentdb.com/api.php?amount=" + numberOfQuestion + "&category=23&type=multiple";
+        String url = "https://opentdb.com/api.php?amount=" + numberOfQuestion + "&category=" + currentUser.getQuizCategory() + "&type=multiple";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,

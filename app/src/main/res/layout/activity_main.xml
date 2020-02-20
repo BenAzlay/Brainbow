@@ -51,6 +51,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:padding="30dp"
-        android:text="Set goals" />
+        android:text="Settings" />
 
 </LinearLayout>
