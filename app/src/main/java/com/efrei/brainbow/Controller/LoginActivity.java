@@ -100,12 +100,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);//Go to MainActivity
+                Boolean found = false;
                 try {
                     List<User> userList = db.getAllUsers();
                     for(User user : userList){
                         if(user.getUsername().equals(usernameInput.getText().toString())
                                 && user.getPwd().equals(pwdInput.getText().toString())){
-
+                            found = true;
                             //Passing user id to MainActivity
                             Bundle b = new Bundle();
                             b.putInt("userID", user.getId());
@@ -114,9 +115,11 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
                         }
                     }
+                    if(!found){
+                        Toast toast = Toast.makeText(getApplicationContext(), "Invalid Credentials", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
 
-                    Toast toast = Toast.makeText(getApplicationContext(), "Invalid Credentials", Toast.LENGTH_SHORT);
-                    toast.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
