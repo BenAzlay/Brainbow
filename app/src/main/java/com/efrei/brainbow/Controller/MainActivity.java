@@ -2,6 +2,7 @@ package com.efrei.brainbow.Controller;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,6 +27,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private static final int QUIZ_ACTIVITY_REQUEST_CODE = 10;
+    private static final int RUN_ACTIVITY_REQUEST_CODE = 11;
     private static final int SETTINGS_ACTIVITY_REQUEST_CODE = 12;
     public static final String PREF_KEY_QUIZ_SCORE = "PREF_KEY_QUIZ_SCORE";
     public static final String PREF_KEY_QUIZ_GOAL = "PREF_KEY_QUIZ_GOAL";
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView deadlineLabel;
     private Button quizButton;
     private Button settingsButton;
+    private Button runButton;
+    private Button aboutButton;
     private User currentUser;
     private int id;
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -51,10 +55,12 @@ public class MainActivity extends AppCompatActivity {
         deadlineLabel = (TextView) findViewById(R.id.deadlineLabel);
         quizButton = (Button) findViewById(R.id.activity_main_play_btn);
         settingsButton = (Button) findViewById(R.id.settingsButton);
+        runButton = (Button) findViewById(R.id.runButton);
+        aboutButton = (Button) findViewById(R.id.aboutButton);
         quizScoreLabel = (TextView) findViewById(R.id.quizScoreLabel);
         runScoreLabel = (TextView) findViewById(R.id.runScoreLabel);
 
-        quizButton.setEnabled(true);
+
 
         //Get current user
         db = new DatabaseHandler(this);
@@ -84,6 +90,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(quizActivity, QUIZ_ACTIVITY_REQUEST_CODE);
             }
         });
+        runButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent runActivity = new Intent(MainActivity.this, RunActivity.class);
+                Bundle b = new Bundle();
+                b.putInt("userID", currentUser.getId());
+                runActivity.putExtras(b);
+                startActivityForResult(runActivity, RUN_ACTIVITY_REQUEST_CODE);
+            }
+        });
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
                 b.putInt("userID", currentUser.getId());
                 settingsActivity.putExtras(b);
                 startActivityForResult(settingsActivity, SETTINGS_ACTIVITY_REQUEST_CODE);
+            }
+        });
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent aboutActivity = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(aboutActivity);
             }
         });
     }
@@ -148,10 +171,16 @@ public class MainActivity extends AppCompatActivity {
 
             //Adding the score to those of previous sessions
             currentUser.setQuizCurrentScore(currentUser.getQuizCurrentScore() + preferences.getInt(PREF_KEY_QUIZ_SCORE, 0));
+        }
 
-            db.updateUser(currentUser);
+        if (RUN_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
+            // Fetch the score from the Intent
+            int score = data.getIntExtra(RunActivity.BUNDLE_EXTRA_DISTANCE, 0);
 
-            setLabels();
+            preferences.edit().putInt(PREF_KEY_RUN_SCORE, score).apply();
+
+            //Adding the score to those of previous sessions
+            currentUser.setRunCurrentDistance(currentUser.getRunCurrentDistance() + preferences.getInt(PREF_KEY_RUN_SCORE, 0));
         }
 
         if (SETTINGS_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
@@ -176,20 +205,15 @@ public class MainActivity extends AppCompatActivity {
             currentUser.setQuizGoal(quizGoal);
             currentUser.setRunGoal(runGoal);
             currentUser.setQuizCategory(category);
-
-
-            db.updateUser(currentUser);
-
-            setLabels();
         }
+        db.updateUser(currentUser);
+        setLabels();
     }
 
     private void setLabels() {
         quizScoreLabel.setText("Intellect score: " + currentUser.getQuizCurrentScore() + "/" + currentUser.getQuizGoal());
-        runScoreLabel.setText("Physique score: " + currentUser.getRunCurrentDistance() + "/" + currentUser.getRunGoal());
+        runScoreLabel.setText("Physique score: " + currentUser.getRunCurrentDistance() + "/" + currentUser.getRunGoal() + " meters");
         deadlineLabel.setText("Deadline: " + sdf.format(currentUser.getDeadline()));
         greetingText.setText("Welcome " + currentUser.getUsername());
-
-        quizButton.setEnabled(true);
     }
 }

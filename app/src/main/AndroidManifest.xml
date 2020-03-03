@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Controller.SettingsActivity"></activity>
+        <activity android:name=".Controller.AboutActivity"></activity>
+        <activity android:name=".Controller.RunActivity" />
+        <activity android:name=".Controller.SettingsActivity" />
         <activity android:name=".Controller.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

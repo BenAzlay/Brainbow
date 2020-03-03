@@ -131,7 +131,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void setGoals(Boolean reset){
-        Log.e("quizGoalField.getText().toString()=", quizGoalField.getText().toString());
         Intent intent = new Intent();
         intent.putExtra(BUNDLE_EXTRA_RESET, reset);
         Calendar currentCalendar = Calendar.getInstance();
@@ -152,7 +151,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             intent.putExtra(BUNDLE_EXTRA_QUIZ_GOAL, Integer.parseInt(quizGoalField.getText().toString()));
             intent.putExtra(BUNDLE_EXTRA_RUN_GOAL, Integer.parseInt(runGoalField.getText().toString()));
-            intent.putExtra(BUNDLE_EXTRA_CATEGORY, categorySpinner.getSelectedItemPosition() + 8);
+            intent.putExtra(BUNDLE_EXTRA_CATEGORY, categorySpinner.getSelectedItemPosition() + 9);
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             intent.putExtra(BUNDLE_EXTRA_DEADLINE, sdf.format(calendar.getTime()));
             setResult(RESULT_OK, intent);

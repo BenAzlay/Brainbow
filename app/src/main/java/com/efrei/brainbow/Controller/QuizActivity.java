@@ -3,7 +3,6 @@ package com.efrei.brainbow.Controller;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.app.VoiceInteractor;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -86,6 +85,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         numberOfQuestion = 10;
         questionIndex = 0;
 
+        Log.e("CATEGORY", Integer.toString(currentUser.getQuizCategory()));
+
         //API CONNECTION
         String url = "https://opentdb.com/api.php?amount=" + numberOfQuestion + "&category=" + currentUser.getQuizCategory() + "&type=multiple";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -166,16 +167,25 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         }
         else{ //Set next question
             currentQuestion = quiz.getResults().get(questionIndex).getQuestion();
-            questionText.setText(currentQuestion);
+            questionText.setText(replaceJunk(currentQuestion));
 
             currentAnswers.add(quiz.getResults().get(questionIndex).getCorrect_answer());
             currentAnswers.addAll(quiz.getResults().get(questionIndex).getIncorrect_answers());
             Collections.shuffle(currentAnswers);
-            answer1.setText(currentAnswers.get(0));
-            answer2.setText(currentAnswers.get(1));
-            answer3.setText(currentAnswers.get(2));
-            answer4.setText(currentAnswers.get(3));
+            answer1.setText(replaceJunk(replaceJunk(currentAnswers.get(0))));
+            answer2.setText(replaceJunk(replaceJunk(currentAnswers.get(1))));
+            answer3.setText(replaceJunk(replaceJunk(currentAnswers.get(2))));
+            answer4.setText(replaceJunk(replaceJunk(currentAnswers.get(3))));
         }
 
+    }
+
+    private String replaceJunk(String string) {
+        string = string.replaceAll("&quot;","\"");
+        string = string.replaceAll("&#039;","\'");
+        string = string.replaceAll("&OUML;","ö");
+        string = string.replaceAll("&AUML;","ä");
+        string = string.replaceAll("&AMP;","&");
+        return string;
     }
 }
